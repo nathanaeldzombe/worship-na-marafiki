@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400;1,600&family=Crimson+Pro:wght@300;400;500&family=JetBrains+Mono:wght@400;500&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400;1,600&family=Crimson+Pro:wght@300;400;500&family=JetBrains+Mono:wght@400;500&family=Kaushan+Script&display=swap');
 
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
@@ -34,6 +34,8 @@ a { color: inherit; }
 .nav { background: rgba(250,246,239,0.97); backdrop-filter: blur(8px); border-bottom: 1px solid var(--border-gold); padding: 0 2rem; display: flex; align-items: center; justify-content: space-between; height: 64px; position: sticky; top: 0; z-index: 50; }
 .nav-logo { font-family: 'Cormorant Garamond', serif; font-size: 18px; font-weight: 600; color: var(--navy); text-decoration: none; letter-spacing: 0.04em; }
 .nav-logo span { color: var(--gold); }
+.nav-logo .wordmark { font-family: 'Kaushan Script', cursive; font-size: 22px; font-weight: 400; letter-spacing: 0.01em; line-height: 1; }
+.nav-logo .wordmark span { color: var(--gold); }
 .nav-links { display: flex; align-items: center; gap: 1.5rem; list-style: none; }
 .nav-links a { font-size: 14px; color: var(--text-mid); text-decoration: none; transition: color 0.2s; }
 .nav-links a:hover, .nav-links a.active { color: var(--gold); }

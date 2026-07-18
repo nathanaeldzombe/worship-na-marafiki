@@ -11,7 +11,7 @@ export function Nav({ active }) {
     <nav className="nav">
       <Link className="nav-logo" href="/" style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
         <Image src="/logo-icon-black.png" alt="Worship na Marafiki" width={40} height={40} priority style={{ width: 40, height: 40 }} />
-        <span>Worship <span>na Marafiki</span></span>
+        <span className="wordmark">Worship <span>na Marafiki</span></span>
       </Link>
       <ul className="nav-links">
         {links.map(([href, label, key]) => (

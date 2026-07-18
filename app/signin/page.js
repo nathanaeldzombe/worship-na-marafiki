@@ -48,7 +48,7 @@ function SignInInner() {
   return (
     <>
       <nav className="nav">
-        <Link className="nav-logo" href="/">Worship <span>na Marafiki</span></Link>
+        <Link className="nav-logo" href="/"><span className="wordmark">Worship <span>na Marafiki</span></span></Link>
         <Link href="/library" style={{ fontSize: 13, color: 'var(--text-muted)', textDecoration: 'none' }}>← Back to songs</Link>
       </nav>
 
