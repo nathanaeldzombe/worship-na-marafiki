@@ -145,3 +145,27 @@ Translations sit privately in `translation_in_progress` / `translation_review` u
 ---
 
 *Free for congregational use. © Worship na Marafiki.*
+
+---
+
+## Panel accounts (private upload area)
+
+The upload form at `/panel/upload` is protected. Only signed-in panel members can reach it, and only an admin can create accounts.
+
+### One-time setup
+
+1. **Create the accounts table.** In the Neon SQL Editor, run the contents of `db/auth-schema.sql`.
+2. **Add the session secret in Vercel.** Project → **Settings → Environment Variables** → add:
+   - **Name:** `AUTH_SECRET`
+   - **Value:** a long random string (64 hex characters works well)
+   - Apply to all environments, then **Save**.
+3. **Redeploy** so the secret takes effect (Deployments → ⋯ → Redeploy).
+4. **Create the first admin.** Visit `/signin`. Because there are no accounts yet, it shows a "Create the first admin account" form. Fill it in — this first account becomes the **admin**, and you're signed in immediately.
+
+### Day-to-day
+
+- **Admin adds members:** signed in as admin, go to **Manage accounts** (link in the panel bar) → fill name, email, temporary password → **Create account**. Share those details with the member.
+- **Members sign in** at `/signin` with the email and password they were given.
+- **Sign out** with the button in the panel bar.
+
+Sessions last 30 days. If you ever change `AUTH_SECRET`, everyone is signed out and must sign in again.
