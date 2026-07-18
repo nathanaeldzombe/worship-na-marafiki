@@ -1,5 +1,5 @@
 import { sql } from '@/lib/db';
-
+export const dynamic = 'force-dynamic';
 // POST /api/versions — panel adds a language version to an existing song
 // Body: { songId, languageName, title, lyrics, lyricsWithChords, originalKey,
 //         isOriginal, status, translatedBy, media:[{instrument,url}] }
