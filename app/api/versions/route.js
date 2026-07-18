@@ -1,10 +1,13 @@
 import { sql } from '@/lib/db';
+import { getSession } from '@/lib/auth';
 export const dynamic = 'force-dynamic';
+
 // POST /api/versions — panel adds a language version to an existing song
-// Body: { songId, languageName, title, lyrics, lyricsWithChords, originalKey,
-//         isOriginal, status, translatedBy, media:[{instrument,url}] }
 export async function POST(request) {
   try {
+    const session = await getSession();
+    if (!session) return Response.json({ error: 'You must be signed in.' }, { status: 401 });
+
     const b = await request.json();
 
     const [version] = await sql`
@@ -40,9 +43,11 @@ export async function POST(request) {
 }
 
 // PATCH /api/versions — panel verifies / publishes a version
-// Body: { versionId, status, verifiedBy, publish, publishSong }
 export async function PATCH(request) {
   try {
+    const session = await getSession();
+    if (!session) return Response.json({ error: 'You must be signed in.' }, { status: 401 });
+
     const b = await request.json();
     await sql`
       UPDATE song_versions

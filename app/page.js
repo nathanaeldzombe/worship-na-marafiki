@@ -36,7 +36,7 @@ export default function Home() {
           </p>
           <div style={{ display: 'flex', gap: '1rem', justifyContent: 'center', flexWrap: 'wrap' }}>
             <Link href="/library" className="btn-primary">Browse the Library</Link>
-            <Link href="/panel/upload" className="btn-ghost">Submit a Song</Link>
+            <Link href="/submit" className="btn-ghost">Submit a Song</Link>
           </div>
         </div>
       </section>

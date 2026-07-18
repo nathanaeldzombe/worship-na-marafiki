@@ -94,7 +94,7 @@ Back in Vercel → **Deployments** → open the latest → **Redeploy** (or just
 ### 7. Point your domain at it
 
 1. Vercel project → **Settings → Domains**.
-2. Add `worshipnamarafiki.africa` (and `www.worshipnamarafiki.africa` if you want).
+2. Add `worshipnamarafiki.org` (and `www.worshipnamarafiki.org` if you want).
 3. Vercel shows you the DNS records to add. Log in wherever you registered the `.africa` domain and add them (usually an **A record** to Vercel's IP and a **CNAME** for `www`).
 4. Wait for DNS to propagate — often minutes, up to a day for `.africa`. HTTPS is automatic once it resolves.
 
@@ -169,3 +169,24 @@ The upload form at `/panel/upload` is protected. Only signed-in panel members ca
 - **Sign out** with the button in the panel bar.
 
 Sessions last 30 days. If you ever change `AUTH_SECRET`, everyone is signed out and must sign in again.
+
+---
+
+## Public song recommendations (Submit a Song)
+
+The **Submit a Song** tab is a public form at `/submit`. Anyone can recommend a song — name, title, links, whether it's translated, lyrics. Submitting emails the team and saves a backup row in the database. The panel then decides whether to add it through the upload form. The panel **sign-in** link lives quietly at the bottom of this page (not in the top nav).
+
+### One-time setup for recommendations
+
+1. **Create the backup table.** In the Neon SQL Editor, run `db/suggestions-schema.sql`.
+2. **Set up email with Resend** (free tier is plenty):
+   - Sign up at resend.com.
+   - Add and verify your domain `worshipnamarafiki.org` (Resend shows you DNS records to add where the domain is registered). This lets you send from an address like `hello@worshipnamarafiki.org`.
+   - Create an **API key**.
+3. **Add environment variables in Vercel** (Settings → Environment Variables):
+   - `RESEND_API_KEY` = your Resend API key
+   - `SUGGESTIONS_TO` = the inbox that should receive recommendations (e.g. `hello@worshipnamarafiki.org`)
+   - `SUGGESTIONS_FROM` = a verified sender, e.g. `Worship na Marafiki <hello@worshipnamarafiki.org>`
+4. **Redeploy.**
+
+Until Resend is configured, recommendations are still captured in the `song_suggestions` table (nothing is lost) — email notifications just won't send yet. Before your domain is verified you can test by setting `SUGGESTIONS_FROM` to `onboarding@resend.dev` and sending to your own Resend account email.

@@ -26,7 +26,6 @@ export async function middleware(request) {
   return NextResponse.next();
 }
 
-// Only guard the panel pages. The public site and library stay open.
 export const config = {
   matcher: ['/panel/:path*'],
 };

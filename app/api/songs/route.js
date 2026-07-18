@@ -1,5 +1,7 @@
 import { sql } from '@/lib/db';
+import { getSession } from '@/lib/auth';
 export const dynamic = 'force-dynamic';
+
 // GET /api/songs  — public library, reads from the publish-gated view
 // Supports ?q= &lang= &country= &theme= &type= &tempo=
 export async function GET(request) {
@@ -12,7 +14,6 @@ export async function GET(request) {
   const tempo = searchParams.get('tempo');
 
   try {
-    // Base: one row per published version, with joined labels + inherited tags
     const rows = await sql`
       SELECT
         v.id            AS version_id,
@@ -42,7 +43,6 @@ export async function GET(request) {
       ORDER BY v.updated_at DESC
     `;
 
-    // Filter in JS (dataset is small at launch; move to SQL when it grows)
     let out = rows;
     if (q) {
       const needle = q.toLowerCase();
@@ -66,13 +66,13 @@ export async function GET(request) {
 }
 
 // POST /api/songs — panel creates a song (the work) + its tags
-// Body: { title, artistName, countryName, originalLanguageName, year,
-//         rightsStatus, rightsNotes, themes:[], songType, tempo }
 export async function POST(request) {
   try {
+    const session = await getSession();
+    if (!session) return Response.json({ error: 'You must be signed in.' }, { status: 401 });
+
     const b = await request.json();
 
-    // resolve or create artist
     let artistId = null;
     if (b.artistName?.trim()) {
       const country = await sql`SELECT id FROM countries WHERE name = ${b.countryName}`;
@@ -98,7 +98,6 @@ export async function POST(request) {
       RETURNING id
     `;
 
-    // attach tags (themes[] + one song_type + one tempo)
     const slugs = [
       ...(b.themes || []).map((t) => ['theme', t]),
       ...(b.songType ? [['song_type', b.songType]] : []),

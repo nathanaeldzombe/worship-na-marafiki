@@ -5,7 +5,6 @@ export function Nav({ active }) {
     ['/library', 'Songs', 'songs'],
     ['/library', 'Languages', 'languages'],
     ['/#about', 'About', 'about'],
-    ['/panel/upload', 'Submit a Song', 'submit'],
   ];
   return (
     <nav className="nav">
@@ -21,8 +20,8 @@ export function Nav({ active }) {
           </li>
         ))}
         <li>
-          <Link href="/signin" className="nav-cta">
-            Sign In
+          <Link href="/submit" className="nav-cta">
+            Submit a Song
           </Link>
         </li>
       </ul>

@@ -56,7 +56,6 @@ export default function UploadPage() {
     setSaving(true);
     setMessage(null);
     try {
-      // 1. create the song + tags
       const sRes = await fetch('/api/songs', {
         method: 'POST', headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
@@ -70,7 +69,6 @@ export default function UploadPage() {
       if (sData.error) throw new Error(sData.error);
       const songId = sData.songId;
 
-      // 2. create each version + its media
       for (const v of versions) {
         const isOriginal = v.status === 'original';
         const publishVersion = isOriginal || v.status === 'translation_verified';
@@ -84,13 +82,12 @@ export default function UploadPage() {
         });
         const vData = await vRes.json();
         if (vData.error) throw new Error(vData.error);
-        // publish the version + the song
         await fetch('/api/versions', {
           method: 'PATCH', headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ versionId: vData.versionId, status: v.status, verifiedBy: v.translatedBy, publish: publishVersion, publishSong: publishVersion, songId }),
         });
       }
-      setMessage({ ok: true, text: `Published "${song.title}" to worshipnamarafiki.africa.` });
+      setMessage({ ok: true, text: `Published "${song.title}" to worshipnamarafiki.org.` });
     } catch (e) {
       setMessage({ ok: false, text: e.message });
     } finally {
@@ -114,7 +111,6 @@ export default function UploadPage() {
           ))}
         </div>
 
-        {/* 1 · SONG */}
         {tab === 'song' && (
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit,minmax(240px,1fr))', gap: '0 24px' }}>
             <Field label="Song title (original language)"><input style={input} value={song.title} placeholder="e.g. Shangilia" onChange={(e) => setSong({ ...song, title: e.target.value })} /></Field>
@@ -127,7 +123,6 @@ export default function UploadPage() {
           </div>
         )}
 
-        {/* 2 · VERSIONS */}
         {tab === 'versions' && (
           <div>
             {versions.length > 0 && (
@@ -176,7 +171,6 @@ export default function UploadPage() {
               </div>
             </div>
 
-            {/* media for this version */}
             <div style={{ marginTop: 18 }}>
               <span style={lbl}>How-to-play videos for this version (optional)</span>
               <div style={{ display: 'flex', gap: 10, alignItems: 'center', flexWrap: 'wrap' }}>
@@ -191,7 +185,6 @@ export default function UploadPage() {
           </div>
         )}
 
-        {/* 3 · TAGS */}
         {tab === 'tags' && (
           <div>
             <Field label="Themes (choose all that apply)"><div style={{ display: 'flex', gap: 8, flexWrap: 'wrap' }}>{THEMES.map((t) => <Chip key={t} active={themes.includes(t)} onClick={() => toggleTheme(t)}>{t}</Chip>)}</div></Field>
@@ -200,7 +193,6 @@ export default function UploadPage() {
           </div>
         )}
 
-        {/* 4 · REVIEW */}
         {tab === 'review' && (
           <div style={{ maxWidth: 560 }}>
             <span style={lbl}>Publish checklist — a song only goes live when every gate is cleared</span>
@@ -210,7 +202,7 @@ export default function UploadPage() {
             <Gate ok={hasVerified}>At least one version is original or panel-verified</Gate>
             <Gate ok={hasTags}>Tags complete (themes, song type, tempo)</Gate>
             <button className="btn-primary" disabled={!canPublish || saving} onClick={publish} style={{ marginTop: 24, opacity: canPublish && !saving ? 1 : 0.5, cursor: canPublish && !saving ? 'pointer' : 'not-allowed' }}>
-              {saving ? 'Publishing…' : canPublish ? 'Publish to worshipnamarafiki.africa' : 'Complete the gates above'}
+              {saving ? 'Publishing…' : canPublish ? 'Publish to worshipnamarafiki.org' : 'Complete the gates above'}
             </button>
             {message && <div style={{ marginTop: 14, fontSize: 14, color: message.ok ? 'var(--success)' : 'var(--error)' }}>{message.text}</div>}
             {!rightsOk && song.title && <div style={{ marginTop: 12, fontSize: 13, color: 'var(--burgundy)' }}>Rights are still {RIGHTS.find((r) => r[0] === song.rights)?.[1].toLowerCase()} — the song stays private until permission is granted.</div>}

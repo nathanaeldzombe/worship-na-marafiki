@@ -1,5 +1,6 @@
 import { sql } from '@/lib/db';
 export const dynamic = 'force-dynamic';
+
 // GET /api/songs/:id — full song with every published version + media
 export async function GET(_request, { params }) {
   const id = Number(params.id);
