@@ -33,6 +33,9 @@ export default async function PanelLayout({ children }) {
           <Link href="/panel/upload" style={{ color: 'rgba(255,255,255,0.7)', textDecoration: 'none' }}>
             Upload
           </Link>
+          <Link href="/panel/manage" style={{ color: 'rgba(255,255,255,0.7)', textDecoration: 'none' }}>
+            Manage songs
+          </Link>
           {session.role === 'admin' && (
             <Link href="/panel/accounts" style={{ color: 'rgba(255,255,255,0.7)', textDecoration: 'none' }}>
               Manage accounts
