@@ -1,5 +1,5 @@
 import { sql } from '@/lib/db';
-
+export const dynamic = 'force-dynamic';
 // GET /api/songs  — public library, reads from the publish-gated view
 // Supports ?q= &lang= &country= &theme= &type= &tempo=
 export async function GET(request) {
