@@ -4,7 +4,7 @@ import Image from 'next/image';
 export function Nav({ active }) {
   const links = [
     ['/library', 'Songs', 'songs'],
-    ['/library', 'Languages', 'languages'],
+    ['/languages', 'Languages', 'languages'],
     ['/#about', 'About', 'about'],
   ];
   return (
@@ -35,7 +35,7 @@ export function Footer() {
   return (
     <footer>
       <Image src="/logo-icon-white.png" alt="Worship na Marafiki" width={56} height={56} style={{ width: 56, height: 56, marginBottom: 12, opacity: 0.9 }} />
-      <div className="footer-brand">
+      <div className="footer-brand wordmark">
         Worship <span>na Marafiki</span>
       </div>
       <div style={{ opacity: 0.5, marginBottom: 12 }}>

@@ -55,3 +55,51 @@ button:focus-visible, a:focus-visible, input:focus-visible, select:focus-visible
 footer { background: var(--navy); color: rgba(255,255,255,0.6); padding: 2.5rem 2rem; text-align: center; font-size: 0.85rem; }
 footer .footer-brand { font-family: 'Cormorant Garamond', serif; font-size: 1.2rem; color: var(--gold-light); margin-bottom: 4px; }
 footer .footer-brand span { color: var(--gold); }
+
+/* ---- Kaushan footer wordmark ---- */
+footer .footer-brand.wordmark { font-family: 'Kaushan Script', cursive; font-size: 1.7rem; font-weight: 400; color: var(--gold-light); }
+footer .footer-brand.wordmark span { color: var(--gold); }
+
+/* ---- Language tiles ---- */
+.lang-tile {
+  display: block;
+  text-align: center;
+  text-decoration: none;
+  background: var(--white);
+  border: 1px solid var(--border-gold);
+  border-radius: 6px;
+  padding: 1.5rem 1rem;
+  transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
+}
+.lang-tile:hover {
+  transform: translateY(-4px);
+  border-color: var(--gold);
+  box-shadow: 0 10px 30px rgba(15,31,61,0.10);
+}
+
+/* ---- Subtle animations ---- */
+/* Gentle fade-up as elements enter view */
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(16px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+.reveal {
+  animation: fadeUp 0.7s ease both;
+}
+
+/* Soft hover lift for cards and buttons (respects existing styles) */
+.song-card, .lang-card { transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease; }
+.song-card:hover, .lang-card:hover { transform: translateY(-3px); }
+
+.btn-primary, .btn-ghost { transition: transform 0.15s ease, background 0.25s ease, border-color 0.2s ease, color 0.2s ease; }
+.btn-primary:hover { transform: translateY(-2px); }
+
+/* Logo icon gentle scale on hover */
+.nav-logo img { transition: transform 0.25s ease; }
+.nav-logo:hover img { transform: scale(1.06); }
+
+/* Respect users who prefer reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  .reveal { animation: none; }
+  * { transition: none !important; }
+}

@@ -5,7 +5,7 @@ import Link from 'next/link';
 import { useSearchParams } from 'next/navigation';
 import { Nav, Footer } from '@/components/Chrome';
 
-const LANGUAGES = ['Swahili','Zulu','Kinyarwanda','Shona','Igbo','Yoruba','Hausa','Xhosa','Setswana','Kirundi','Luganda','Kikuyu','Dholuo','Chichewa','Amharic','Tigrinya','Lingala','Tshiluba'];
+import { ALL_LANGUAGES as LANGUAGES } from '@/lib/languages';
 const THEMES = ['Praise','Adoration','Thanksgiving','Surrender','Faith & Trust','Hope','Healing','Holy Spirit','The Cross','Communion','Prayer & Intercession','Unity & Community','Christmas','Easter'];
 const TEMPOS = ['Fast','Mid-tempo','Slow','Celebration','Reflective'];
 

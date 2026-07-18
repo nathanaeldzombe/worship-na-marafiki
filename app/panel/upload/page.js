@@ -4,7 +4,7 @@ import { useState, useMemo } from 'react';
 import { Nav, Footer } from '@/components/Chrome';
 import { parseChordBora } from '@/lib/chordbora';
 
-const LANGUAGES = ['Swahili','Zulu','Kinyarwanda','Shona','Igbo','Yoruba','Hausa','Xhosa','Setswana','Kirundi','Luganda','Kikuyu','Dholuo','Chichewa','Amharic','Tigrinya','Lingala','Tshiluba'];
+import { ALL_LANGUAGES as LANGUAGES } from '@/lib/languages';
 const COUNTRIES = ['Tanzania','Kenya','Uganda','Rwanda','Burundi','DR Congo','Nigeria','Ghana','South Africa','Zimbabwe','Botswana','Malawi','Ethiopia','Eritrea'];
 const THEMES = ['Praise','Adoration','Thanksgiving','Surrender','Repentance','Faith & Trust','Hope','Healing','Deliverance','Holy Spirit','The Cross','Resurrection','Second Coming','Communion','Prayer & Intercession','Unity & Community','Mission & Evangelism','Christmas','Easter','Wedding','Funeral & Comfort'];
 const SONG_TYPES = ['Hymn','Chorus','Contemporary','Traditional','Call and Response','Medley'];

@@ -4,7 +4,8 @@ import { useState } from 'react';
 import Link from 'next/link';
 import { Nav } from '@/components/Chrome';
 
-const LANGUAGES = ['Swahili','Zulu','Kinyarwanda','Shona','Igbo','Yoruba','Hausa','Xhosa','Setswana','Kirundi','Luganda','Kikuyu','Dholuo','Chichewa','Amharic','Tigrinya','Lingala','Tshiluba','Other / not sure'];
+import { ALL_LANGUAGES } from '@/lib/languages';
+const LANGUAGES = [...ALL_LANGUAGES, 'Other / not sure'];
 
 const input = { width: '100%', padding: '11px 13px', fontSize: 15, color: 'var(--text-dark)', background: 'white', border: '1px solid var(--border-gold)', borderRadius: 3, outline: 'none', fontFamily: "'Crimson Pro', serif" };
 const lbl = { fontSize: 11, letterSpacing: '0.12em', textTransform: 'uppercase', color: 'var(--text-muted)', marginBottom: 6, fontWeight: 500, display: 'block' };
