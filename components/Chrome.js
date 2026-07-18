@@ -1,4 +1,5 @@
 import Link from 'next/link';
+import Image from 'next/image';
 
 export function Nav({ active }) {
   const links = [
@@ -8,8 +9,9 @@ export function Nav({ active }) {
   ];
   return (
     <nav className="nav">
-      <Link className="nav-logo" href="/">
-        Worship <span>na Marafiki</span>
+      <Link className="nav-logo" href="/" style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
+        <Image src="/logo-icon-black.png" alt="Worship na Marafiki" width={40} height={40} priority style={{ width: 40, height: 40 }} />
+        <span>Worship <span>na Marafiki</span></span>
       </Link>
       <ul className="nav-links">
         {links.map(([href, label, key]) => (
@@ -32,6 +34,7 @@ export function Nav({ active }) {
 export function Footer() {
   return (
     <footer>
+      <Image src="/logo-icon-white.png" alt="Worship na Marafiki" width={56} height={56} style={{ width: 56, height: 56, marginBottom: 12, opacity: 0.9 }} />
       <div className="footer-brand">
         Worship <span>na Marafiki</span>
       </div>
