@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react';
 import Link from 'next/link';
 import { Nav, Footer } from '@/components/Chrome';
 import { LANGUAGE_REGIONS } from '@/lib/languages';
+import Flag from '@/components/Flag';
 
 export default function LanguagesPage() {
   const [counts, setCounts] = useState(null); // { Swahili: 3, ... }
@@ -51,7 +52,7 @@ export default function LanguagesPage() {
                     href={`/library?lang=${encodeURIComponent(lang.name)}`}
                     className="lang-tile"
                   >
-                    <span style={{ fontSize: '2.2rem', display: 'block', marginBottom: '0.6rem', lineHeight: 1 }}>{lang.flag}</span>
+                    <span style={{ display: 'block', marginBottom: '0.7rem' }}><Flag cc={lang.cc} size={46} /></span>
                     <span style={{ fontFamily: "'Cormorant Garamond', serif", fontSize: '1.15rem', fontWeight: 600, color: 'var(--navy)', display: 'block' }}>{lang.name}</span>
                     <span style={{ fontSize: 12, color: count ? 'var(--burgundy)' : 'var(--text-muted)', letterSpacing: '0.04em' }}>
                       {counts === null ? '…' : count === 0 ? 'Coming soon' : `${count} song${count !== 1 ? 's' : ''}`}

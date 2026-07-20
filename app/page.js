@@ -1,12 +1,13 @@
 import Link from 'next/link';
 import { Nav, Footer } from '@/components/Chrome';
 import FeaturedSongs from '@/components/FeaturedSongs';
+import Flag from '@/components/Flag';
 
 const LANGUAGES = [
-  ['🇹🇿', 'Swahili', 'East Africa'], ['🇿🇦', 'Zulu', 'South Africa'],
-  ['🇷🇼', 'Kinyarwanda', 'Rwanda'], ['🇿🇼', 'Shona', 'Zimbabwe'],
-  ['🇨🇩', 'Lingala', 'DR Congo'], ['🇳🇬', 'Yoruba', 'Nigeria'],
-  ['🇿🇦', 'Xhosa', 'South Africa'], ['🇲🇼', 'Chichewa', 'Malawi'],
+  ['tz', 'Swahili', 'East Africa'], ['za', 'Zulu', 'South Africa'],
+  ['rw', 'Kinyarwanda', 'Rwanda'], ['zw', 'Shona', 'Zimbabwe'],
+  ['cd', 'Lingala', 'DR Congo'], ['ng', 'Yoruba', 'Nigeria'],
+  ['za', 'Xhosa', 'South Africa'], ['mw', 'Chichewa', 'Malawi'],
 ];
 
 export default function Home() {
@@ -57,10 +58,10 @@ export default function Home() {
             <span style={{ fontSize: 11, letterSpacing: '0.22em', textTransform: 'uppercase', color: 'var(--gold)', fontWeight: 500 }}>The Continent Sings</span>
             <h2 style={{ fontFamily: "'Cormorant Garamond', serif", fontSize: 'clamp(2rem,4vw,3rem)', fontWeight: 600, color: 'var(--navy)', marginTop: '0.6rem' }}>Songs in Your Language</h2>
           </div>
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(140px, 1fr))', gap: 1, border: '1px solid var(--border-gold)', borderRadius: 4, overflow: 'hidden', background: 'var(--border-gold)' }}>
-            {LANGUAGES.map(([flag, name, region]) => (
+          <div className="lang-grid" style={{ border: '1px solid var(--border-gold)', borderRadius: 4, overflow: 'hidden', background: 'var(--border-gold)' }}>
+            {LANGUAGES.map(([cc, name, region]) => (
               <Link key={name + region} href={`/library?lang=${name}`} className="lang-card" style={{ background: 'var(--cream)', padding: '2rem 1.2rem', textAlign: 'center', textDecoration: 'none', display: 'block' }}>
-                <span style={{ fontSize: '2rem', display: 'block', marginBottom: '0.7rem' }}>{flag}</span>
+                <span style={{ display: 'block', marginBottom: '0.7rem' }}><Flag cc={cc} size={44} /></span>
                 <span style={{ fontFamily: "'Cormorant Garamond', serif", fontSize: '1.1rem', fontWeight: 600, color: 'var(--navy)', display: 'block' }}>{name}</span>
                 <span style={{ fontSize: '0.75rem', letterSpacing: '0.1em', textTransform: 'uppercase', color: 'var(--text-muted)' }}>{region}</span>
               </Link>

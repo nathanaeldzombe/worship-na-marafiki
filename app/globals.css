@@ -103,3 +103,8 @@ footer .footer-brand.wordmark span { color: var(--gold); }
   .reveal { animation: none; }
   * { transition: none !important; }
 }
+
+/* ---- Landing language grid: even columns, responsive, no gaps ---- */
+.lang-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1px; }
+@media (max-width: 900px) { .lang-grid { grid-template-columns: repeat(2, 1fr); } }
+@media (max-width: 460px) { .lang-grid { grid-template-columns: repeat(2, 1fr); } }
