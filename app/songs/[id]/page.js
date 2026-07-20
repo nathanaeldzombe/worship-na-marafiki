@@ -18,6 +18,12 @@ export default function SongPage({ params }) {
       .then((r) => r.json())
       .then((d) => (d.error ? setErr(d.error) : setData(d)))
       .catch((e) => setErr(e.message));
+    // Record a view (fire-and-forget; failure is harmless)
+    fetch('/api/views', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ songId: Number(params.id) }),
+    }).catch(() => {});
   }, [params.id]);
 
   if (err) return <Shell><p style={{ padding: '4rem 2rem', textAlign: 'center' }}>Song not found.</p></Shell>;

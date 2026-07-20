@@ -1,17 +1,12 @@
 import Link from 'next/link';
 import { Nav, Footer } from '@/components/Chrome';
+import FeaturedSongs from '@/components/FeaturedSongs';
 
 const LANGUAGES = [
   ['🇹🇿', 'Swahili', 'East Africa'], ['🇿🇦', 'Zulu', 'South Africa'],
   ['🇷🇼', 'Kinyarwanda', 'Rwanda'], ['🇿🇼', 'Shona', 'Zimbabwe'],
   ['🇨🇩', 'Lingala', 'DR Congo'], ['🇳🇬', 'Yoruba', 'Nigeria'],
   ['🇿🇦', 'Xhosa', 'South Africa'], ['🇲🇼', 'Chichewa', 'Malawi'],
-];
-
-const FEATURED = [
-  { title: 'Mungu Mkuu', artist: 'Worship Team · East Africa', lang: 'Swahili', key: 'G', tags: ['Praise', 'Chords'], excerpt: 'Mungu mkuu, sisi tunakuabudu, Mfalme wa milele…' },
-  { title: 'Nkosi Yami', artist: 'Soweto Gospel Choir', lang: 'Zulu', key: 'D', tags: ['Worship', 'Prayer'], excerpt: 'Nkosi yami, ngiyakudumisa, Igama lakho…' },
-  { title: 'Ishe Komborera', artist: 'Zimbabwe Church Music', lang: 'Shona', key: 'C', tags: ['Communion', 'Easter'], excerpt: 'Ishe komborera Africa, Inzwai miteuro yedu…' },
 ];
 
 export default function Home() {
@@ -74,36 +69,8 @@ export default function Home() {
         </div>
       </section>
 
-      {/* Featured songs */}
-      <section style={{ padding: '5rem 2rem', background: 'var(--cream)' }}>
-        <div style={{ maxWidth: 1100, margin: '0 auto' }}>
-          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end', marginBottom: '3rem', flexWrap: 'wrap', gap: '1rem' }}>
-            <div>
-              <span style={{ fontSize: 11, letterSpacing: '0.22em', textTransform: 'uppercase', color: 'var(--gold)', fontWeight: 500 }}>Featured Songs</span>
-              <h2 style={{ fontFamily: "'Cormorant Garamond', serif", fontSize: 'clamp(2rem,4vw,3rem)', fontWeight: 600, color: 'var(--navy)', marginTop: '0.4rem' }}>Songs the Community Loves</h2>
-            </div>
-            <Link href="/library" className="btn-ghost" style={{ fontSize: 13 }}>View All Songs →</Link>
-          </div>
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: '1.5rem' }}>
-            {FEATURED.map((s) => (
-              <div key={s.title} style={{ border: '1px solid var(--border-gold)', borderRadius: 4, padding: '1.8rem', background: 'white' }}>
-                <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '1rem' }}>
-                  <span style={{ fontSize: 11, letterSpacing: '0.12em', textTransform: 'uppercase', background: 'var(--cream-dark)', color: 'var(--text-muted)', padding: '3px 10px', borderRadius: 2 }}>{s.lang}</span>
-                  <span style={{ fontSize: 13, color: 'var(--gold)', fontWeight: 500 }}>Key of {s.key}</span>
-                </div>
-                <div style={{ fontFamily: "'Cormorant Garamond', serif", fontSize: '1.4rem', fontWeight: 600, color: 'var(--navy)' }}>{s.title}</div>
-                <div style={{ fontSize: '0.85rem', color: 'var(--text-muted)', marginBottom: '1rem' }}>{s.artist}</div>
-                <div style={{ fontSize: '0.95rem', color: 'var(--text-mid)', fontStyle: 'italic', borderLeft: '2px solid var(--border-gold)', paddingLeft: '0.8rem', marginBottom: '1.2rem' }}>{s.excerpt}</div>
-                <div style={{ display: 'flex', gap: 6, flexWrap: 'wrap' }}>
-                  {s.tags.map((t) => (
-                    <span key={t} style={{ fontSize: 11, letterSpacing: '0.08em', textTransform: 'uppercase', color: 'var(--burgundy)', background: 'rgba(107,26,42,0.06)', padding: '3px 9px', borderRadius: 2 }}>{t}</span>
-                  ))}
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
+      {/* Featured songs — real, most-viewed */}
+      <FeaturedSongs />
 
       <Footer />
     </>
