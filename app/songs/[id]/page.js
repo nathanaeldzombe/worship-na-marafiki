@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react';
 import Link from 'next/link';
 import { Nav, Footer } from '@/components/Chrome';
 import { parseChordBora, transposeKey } from '@/lib/chordbora';
+import ChordBoraView from '@/components/ChordBoraView';
 
 export default function SongPage({ params }) {
   const [data, setData] = useState(null);
@@ -85,27 +86,11 @@ export default function SongPage({ params }) {
           </div>
 
           {/* Song content */}
-          {sections.map((sec, i) => (
-            <div key={i} style={{ marginBottom: '2.2rem' }}>
-              {sec.label && (
-                <div style={{ fontSize: 10, letterSpacing: '0.2em', textTransform: 'uppercase', color: 'var(--gold)', fontWeight: 500, marginBottom: '0.7rem', display: 'flex', alignItems: 'center', gap: 8 }}>
-                  {sec.label}<span style={{ flex: 1, height: 1, background: 'var(--border-gold)' }} />
-                </div>
-              )}
-              {sec.lines.map((ln, j) =>
-                ln.blank ? (
-                  <div key={j} style={{ height: '0.6rem' }} />
-                ) : (
-                  <div key={j} style={{ marginBottom: '0.2rem' }}>
-                    {view === 'chords' && ln.hasChords && (
-                      <div style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: '0.82rem', fontWeight: 500, color: 'var(--burgundy)', whiteSpace: 'pre', lineHeight: 1.4 }}>{ln.chordRow}</div>
-                    )}
-                    <div style={{ fontSize: view === 'lyrics' ? '1.1rem' : '1.05rem', color: 'var(--text-dark)', lineHeight: view === 'lyrics' ? 1.9 : 1.6, whiteSpace: 'pre-wrap' }}>{ln.lyricRow || '\u00A0'}</div>
-                  </div>
-                )
-              )}
-            </div>
-          ))}
+          <ChordBoraView
+            sections={sections}
+            showChords={view === 'chords'}
+            lyricSize={view === 'lyrics' ? '1.1rem' : '1.05rem'}
+          />
         </div>
 
         {/* Sidebar */}

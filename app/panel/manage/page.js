@@ -15,8 +15,6 @@ const input = { padding: '8px 10px', fontSize: 14, border: '1px solid var(--bord
 export default function ManagePage() {
   const [songs, setSongs] = useState(null);
   const [msg, setMsg] = useState(null);
-  const [editing, setEditing] = useState(null); // song id being edited
-  const [draft, setDraft] = useState({ title: '', rightsStatus: '' });
   const [confirmDelete, setConfirmDelete] = useState(null); // song id pending delete
   const [busy, setBusy] = useState(false);
 
@@ -43,29 +41,6 @@ export default function ManagePage() {
       const d = await r.json();
       if (d.error) throw new Error(d.error);
       setSongs((prev) => prev.map((s) => (s.id === id ? { ...s, is_published: d.is_published } : s)));
-    } catch (e) {
-      setMsg({ ok: false, text: e.message });
-    } finally { setBusy(false); }
-  }
-
-  function startEdit(s) {
-    setEditing(s.id);
-    setDraft({ title: s.title, rightsStatus: s.rights_status });
-    setMsg(null);
-  }
-
-  async function saveEdit(id) {
-    setBusy(true);
-    try {
-      const r = await fetch('/api/manage', {
-        method: 'PATCH', headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ id, action: 'edit', title: draft.title, rightsStatus: draft.rightsStatus }),
-      });
-      const d = await r.json();
-      if (d.error) throw new Error(d.error);
-      setSongs((prev) => prev.map((s) => (s.id === id ? { ...s, title: draft.title, rights_status: draft.rightsStatus } : s)));
-      setEditing(null);
-      setMsg({ ok: true, text: 'Saved.' });
     } catch (e) {
       setMsg({ ok: false, text: e.message });
     } finally { setBusy(false); }
@@ -105,18 +80,6 @@ export default function ManagePage() {
           <div style={{ border: '1px solid var(--border-gold)', borderRadius: 6, background: 'white', overflow: 'hidden' }}>
             {songs.map((s, i) => (
               <div key={s.id} style={{ padding: '14px 16px', borderTop: i ? '1px solid var(--border-gold)' : 'none' }}>
-                {editing === s.id ? (
-                  /* ---- edit mode ---- */
-                  <div style={{ display: 'flex', gap: 10, alignItems: 'center', flexWrap: 'wrap' }}>
-                    <input style={{ ...input, flex: 1, minWidth: 180 }} value={draft.title} onChange={(e) => setDraft({ ...draft, title: e.target.value })} />
-                    <select style={input} value={draft.rightsStatus} onChange={(e) => setDraft({ ...draft, rightsStatus: e.target.value })}>
-                      {RIGHTS.map(([v, l]) => <option key={v} value={v}>{l}</option>)}
-                    </select>
-                    <button className="btn-primary" style={{ padding: '8px 16px' }} disabled={busy} onClick={() => saveEdit(s.id)}>Save</button>
-                    <button className="btn-ghost" style={{ padding: '8px 16px' }} onClick={() => setEditing(null)}>Cancel</button>
-                  </div>
-                ) : (
-                  /* ---- normal row ---- */
                   <div style={{ display: 'flex', gap: 12, alignItems: 'center', flexWrap: 'wrap' }}>
                     <div style={{ flex: 1, minWidth: 200 }}>
                       <div style={{ fontFamily: "'Cormorant Garamond', serif", fontSize: '1.2rem', fontWeight: 600, color: 'var(--navy)' }}>
@@ -139,19 +102,18 @@ export default function ManagePage() {
                         <button onClick={() => toggle(s.id)} disabled={busy} className="btn-ghost" style={{ padding: '7px 14px', fontSize: 12 }}>
                           {s.is_published ? 'Hide' : 'Show'}
                         </button>
-                        <button onClick={() => startEdit(s)} className="btn-ghost" style={{ padding: '7px 14px', fontSize: 12 }}>Edit</button>
+                        <Link href={`/panel/manage/${s.id}`} className="btn-ghost" style={{ padding: '7px 14px', fontSize: 12 }}>Edit</Link>
                         <button onClick={() => { setConfirmDelete(s.id); setMsg(null); }} className="btn-ghost" style={{ padding: '7px 14px', fontSize: 12, borderColor: 'rgba(139,26,26,0.3)', color: 'var(--error)' }}>Delete</button>
                       </div>
                     )}
                   </div>
-                )}
               </div>
             ))}
           </div>
         )}
 
         <p style={{ marginTop: 20, fontSize: 13, color: 'var(--text-muted)' }}>
-          Need to change lyrics or chords? For now, delete and re-add the song through the <Link href="/panel/upload" style={{ color: 'var(--gold)' }}>upload form</Link>. Full lyric editing can be added later.
+          Click <strong>Edit</strong> on any song to change every detail — lyrics, chords, translations, links, and more.
         </p>
       </div>
       <Footer />
