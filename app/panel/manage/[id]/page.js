@@ -87,16 +87,21 @@ export default function EditSongPage({ params }) {
     setV({ media: v.media.filter((_, i) => i !== idx) });
   }
 
-  async function save() {
+  const rightsOk = song?.rightsStatus === 'public_domain' || song?.rightsStatus === 'permission_granted';
+  const hasVerified = versions.some((v) => v.status === 'original' || v.status === 'translation_verified');
+  const canPublish = rightsOk && hasVerified;
+
+  async function save(mode) {
+    const publish = mode === 'publish';
     setSaving(true); setMsg(null);
     try {
       const r = await fetch('/api/manage', {
         method: 'PUT', headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ ...song, versions, deletedVersionIds }),
+        body: JSON.stringify({ ...song, versions, deletedVersionIds, publish }),
       });
       const d = await r.json();
       if (d.error) throw new Error(d.error);
-      setMsg({ ok: true, text: 'Saved. Redirecting…' });
+      setMsg({ ok: true, text: publish && d.published ? 'Saved and published. Redirecting…' : 'Saved as draft. Redirecting…' });
       setTimeout(() => router.push('/panel/manage'), 900);
     } catch (e) {
       setMsg({ ok: false, text: e.message });
@@ -198,11 +203,19 @@ export default function EditSongPage({ params }) {
         )}
 
         {/* SAVE */}
-        <div style={{ marginTop: 30, display: 'flex', gap: 12, alignItems: 'center' }}>
-          <button className="btn-primary" onClick={save} disabled={saving} style={{ opacity: saving ? 0.6 : 1 }}>{saving ? 'Saving…' : 'Save all changes'}</button>
+        <div style={{ marginTop: 30, display: 'flex', gap: 12, alignItems: 'center', flexWrap: 'wrap' }}>
+          <button className="btn-ghost" onClick={() => save('draft')} disabled={saving}>Save as draft</button>
+          <button className="btn-primary" onClick={() => save('publish')} disabled={saving || !canPublish} style={{ opacity: !saving && canPublish ? 1 : 0.5, cursor: !saving && canPublish ? 'pointer' : 'not-allowed' }}>
+            {saving ? 'Saving…' : 'Save & publish'}
+          </button>
           <Link href="/panel/manage" className="btn-ghost">Cancel</Link>
           {msg && <span style={{ fontSize: 14, color: msg.ok ? 'var(--success)' : 'var(--error)' }}>{msg.text}</span>}
         </div>
+        {!rightsOk && (
+          <div style={{ marginTop: 12, fontSize: 13, color: 'var(--burgundy)' }}>
+            Rights aren&apos;t cleared yet, so this can only be saved as a draft. Change the rights status to Public domain or Permission granted to enable publishing.
+          </div>
+        )}
       </div>
       <Footer />
     </>

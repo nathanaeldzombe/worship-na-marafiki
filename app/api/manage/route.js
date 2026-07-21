@@ -173,13 +173,24 @@ export async function PUT(request) {
       }
     }
 
-    // 5) publish state of the song follows whether any version is publishable
-    const [{ any_pub }] = await sql`
-      SELECT bool_or(is_published) AS any_pub FROM song_versions WHERE song_id = ${b.id}
+    // 5) publish state of the song — a song can only be live when its rights
+    // are cleared (public domain or permission granted). Otherwise it stays a
+    // hidden draft, regardless of version status.
+    const rightsCleared = b.rightsStatus === 'public_domain' || b.rightsStatus === 'permission_granted';
+    const [{ any_eligible }] = await sql`
+      SELECT bool_or(status IN ('original','translation_verified')) AS any_eligible
+      FROM song_versions WHERE song_id = ${b.id}
     `;
-    await sql`UPDATE songs SET is_published = ${!!any_pub && b.keepPublished !== false} WHERE id = ${b.id}`;
+    // Default: keep it live if rights are cleared and something is eligible,
+    // unless the editor explicitly asked to keep it a draft (publish === false).
+    const shouldPublish = rightsCleared && !!any_eligible && b.publish !== false;
+    await sql`UPDATE song_versions SET is_published = ${shouldPublish} WHERE song_id = ${b.id} AND status IN ('original','translation_verified')`;
+    if (!shouldPublish) {
+      await sql`UPDATE song_versions SET is_published = FALSE WHERE song_id = ${b.id}`;
+    }
+    await sql`UPDATE songs SET is_published = ${shouldPublish} WHERE id = ${b.id}`;
 
-    return Response.json({ ok: true });
+    return Response.json({ ok: true, published: shouldPublish });
   } catch (e) {
     return Response.json({ error: e.message }, { status: 500 });
   }

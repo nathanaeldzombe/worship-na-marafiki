@@ -50,9 +50,13 @@ export default function UploadPage() {
   const rightsOk = song.rights === 'public_domain' || song.rights === 'permission_granted';
   const hasVerified = versions.some((v) => v.status === 'original' || v.status === 'translation_verified');
   const hasTags = themes.length > 0 && songType && tempo;
-  const canPublish = song.title && rightsOk && hasVerified && hasTags;
+  const hasBasics = song.title && versions.length > 0;
+  const canPublish = hasBasics && rightsOk && hasVerified && hasTags;
+  const canDraft = hasBasics; // a draft just needs a title and at least one version
 
-  async function publish() {
+  async function save(mode) {
+    // mode: 'publish' (go live) or 'draft' (save hidden)
+    const goLive = mode === 'publish';
     setSaving(true);
     setMessage(null);
     try {
@@ -71,7 +75,9 @@ export default function UploadPage() {
 
       for (const v of versions) {
         const isOriginal = v.status === 'original';
-        const publishVersion = isOriginal || v.status === 'translation_verified';
+        const versionEligible = isOriginal || v.status === 'translation_verified';
+        // Only publish the version if we're going live AND it's eligible.
+        const publishVersion = goLive && versionEligible;
         const vRes = await fetch('/api/versions', {
           method: 'POST', headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({
@@ -87,7 +93,12 @@ export default function UploadPage() {
           body: JSON.stringify({ versionId: vData.versionId, status: v.status, verifiedBy: v.translatedBy, publish: publishVersion, publishSong: publishVersion, songId }),
         });
       }
-      setMessage({ ok: true, text: `Published "${song.title}" to worshipnamarafiki.org.` });
+      setMessage({
+        ok: true,
+        text: goLive
+          ? `Published "${song.title}" to worshipnamarafiki.org.`
+          : `Saved "${song.title}" as a draft. It stays hidden until you publish it from Manage Songs.`,
+      });
     } catch (e) {
       setMessage({ ok: false, text: e.message });
     } finally {
@@ -201,11 +212,27 @@ export default function UploadPage() {
             <Gate ok={versions.length > 0}>{versions.length} version{versions.length !== 1 && 's'} added</Gate>
             <Gate ok={hasVerified}>At least one version is original or panel-verified</Gate>
             <Gate ok={hasTags}>Tags complete (themes, song type, tempo)</Gate>
-            <button className="btn-primary" disabled={!canPublish || saving} onClick={publish} style={{ marginTop: 24, opacity: canPublish && !saving ? 1 : 0.5, cursor: canPublish && !saving ? 'pointer' : 'not-allowed' }}>
-              {saving ? 'Publishing…' : canPublish ? 'Publish to worshipnamarafiki.org' : 'Complete the gates above'}
-            </button>
+
+            <div style={{ display: 'flex', gap: 12, marginTop: 24, flexWrap: 'wrap' }}>
+              <button className="btn-ghost" disabled={!canDraft || saving} onClick={() => save('draft')} style={{ opacity: canDraft && !saving ? 1 : 0.5, cursor: canDraft && !saving ? 'pointer' : 'not-allowed' }}>
+                {saving ? 'Saving…' : 'Save as draft'}
+              </button>
+              <button className="btn-primary" disabled={!canPublish || saving} onClick={() => save('publish')} style={{ opacity: canPublish && !saving ? 1 : 0.5, cursor: canPublish && !saving ? 'pointer' : 'not-allowed' }}>
+                {saving ? 'Publishing…' : 'Publish to worshipnamarafiki.org'}
+              </button>
+            </div>
+
             {message && <div style={{ marginTop: 14, fontSize: 14, color: message.ok ? 'var(--success)' : 'var(--error)' }}>{message.text}</div>}
-            {!rightsOk && song.title && <div style={{ marginTop: 12, fontSize: 13, color: 'var(--burgundy)' }}>Rights are still {RIGHTS.find((r) => r[0] === song.rights)?.[1].toLowerCase()} — the song stays private until permission is granted.</div>}
+            {!rightsOk && song.title && (
+              <div style={{ marginTop: 12, fontSize: 13, color: 'var(--burgundy)' }}>
+                Rights are still {RIGHTS.find((r) => r[0] === song.rights)?.[1].toLowerCase()} — you can save this as a draft now, and publish it later from Manage Songs once the rights clear.
+              </div>
+            )}
+            {rightsOk && !canPublish && song.title && (
+              <div style={{ marginTop: 12, fontSize: 13, color: 'var(--text-muted)' }}>
+                Rights are cleared — complete the remaining gates above to enable publishing, or save as a draft for now.
+              </div>
+            )}
           </div>
         )}
       </div>
