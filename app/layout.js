@@ -14,6 +14,9 @@ export const metadata = {
   ],
   metadataBase: new URL('https://worshipnamarafiki.org'),
   alternates: { canonical: '/' },
+  verification: {
+    google: 'cNpsNjsf2zIxCK0pflYdrptNEwAdv9EK9DFi27EOeYM',
+  },
   openGraph: {
     title: 'Worship na Marafiki — African Worship Songs, Lyrics & Chords',
     description:
